@@ -6,81 +6,76 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Disregard that</title>
+  <title>🐰</title>
+  <script type="text/javascript">
+  // Single Page Apps for GitHub Pages
+  // https://github.com/rafrex/spa-github-pages
+  // Copyright (c) 2016 Rafael Pedicini, licensed under the MIT License
+  // ----------------------------------------------------------------------
+  // This script checks to see if a redirect is present in the query string
+  // and converts it back into the correct url and adds it to the
+  // browser's history using window.history.replaceState(...),
+  // which won't cause the browser to attempt to load the new url.
+  // When the single page app is loaded further down in this file,
+  // the correct url will be waiting in the browser's history for
+  // the single page app to route accordingly.
+  (function(l) {
+    if (l.search) {
+      var q = {};
+      l.search.slice(1).split('&').forEach(function(v) {
+        var a = v.split('=');
+        q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
+      });
+      if (q.p !== undefined) {
+        window.history.replaceState(null, null,
+          l.pathname.slice(0, -1) + (q.p || '') +
+          (q.q ? ('?' + q.q) : '') +
+          l.hash
+        );
+      }
+    }
+  }(window.location))
+</script>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script type="text/javascript">
-    // Single Page Apps for GitHub Pages
-    // https://github.com/rafrex/spa-github-pages
-    // Copyright (c) 2016 Rafael Pedicini, licensed under the MIT License
-    // ----------------------------------------------------------------------
-    // This script checks to see if a redirect is present in the query string
-    // and converts it back into the correct url and adds it to the
-    // browser's history using window.history.replaceState(...),
-    // which won't cause the browser to attempt to load the new url.
-    // When the single page app is loaded further down in this file,
-    // the correct url will be waiting in the browser's history for
-    // the single page app to route accordingly.
-    (function(l) {
-      if (l.search) {
-        var q = {};
-        l.search.slice(1).split('&').forEach(function(v) {
-          var a = v.split('=');
-          q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
-        });
-        if (q.p !== undefined) {
-          window.history.replaceState(null, null,
-            l.pathname.slice(0, -1) + (q.p || '') +
-            (q.q ? ('?' + q.q) : '') +
-            l.hash
-          );
-        }
-      }
-    }(window.location))
-  </script>
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
+  <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
   <link rel="stylesheet" href="app.css">
   <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
-<body>
-  <nav class="navbar navbar-default" role="navigation">
-    <div class="navbar-header">
+<body style="overflow-x: hidden;">
+    <md-nav-bar
+      md-selected-nav-item="currentNavItem"
+      nav-bar-aria-label="navigation links">
       <label class="navbar-brand">Crooked Hipster</label>
-      <ul class="nav navbar-nav">
-        <li><a href="#!/start">Start</a></li>
-        <li><a href="#!/freedom">Freedom</a></li>
-      </ul>
-    </div>
-  </nav>
-  <div >
-    <div class="nature">
-      <!--<div class="bird">
-        <div class="left-wing"></div>
-        <div class="bird-body"></div>
-        <div class="right-wing"></div>
-      </div>-->
-      <div class="sun"></div>
-      <div class="bg_close"><div class="cloud"></div></div>
-      <div class="bg_far"><div class="cloud"></div></div>
-    </div>
-    <div class="panel panel-default" style="margin-left: 30px; margin-right: 30px;">
-      <div class="panel-body">
-        <div ng-view></div>
-      </div>
-    </div>
-  </div>
-  <div>&nbsp;<i>crooker-hipster version <span app-version></span></i> (not that it matters.)</div>
+      <md-nav-item md-nav-href="#!/start">Start</md-nav-item>
+      <md-nav-item md-nav-href="#!/life">Life</md-nav-item>
+      <md-nav-item md-nav-href="#!/freedom">Freedom</md-nav-item>
+    </md-nav-bar>
+    <div ng-view class="margin-top: 15px; text-align: center;"></div>
+    <div class="sun"></div>
+    <div class="bg_close"><div class="cloud"></div></div>
+    <div class="bg_far"><div class="cloud"></div></div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
   -->
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+  <script src="bower_components/angular-aria/angular-aria.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-material/angular-material.js"></script>
+  <script src="bower_components/underscore/underscore-min.js"></script>
+  <script src="bower_components/isomer/dist/isomer.min.js"></script>
+
+
   <script src="app.js"></script>
+  <script src="lifeView/game_of_life.js"></script>
+  <script src="lifeView/view.js"></script>
   <script src="startView/view.js"></script>
   <script src="freedomView/view.js"></script>
   <script src="components/version/version.js"></script>
