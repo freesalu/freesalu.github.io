@@ -31,55 +31,53 @@
           l.pathname.slice(0, -1) + (q.p || '') +
           (q.q ? ('?' + q.q) : '') +
           l.hash
-        );
+          );
       }
     }
   }(window.location))
 </script>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
-  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
-  <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
-  <link rel="stylesheet" href="app.css">
-  <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
+<link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
+<link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+<link rel="stylesheet" href="app.css">
+<script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
-<body style="overflow-x: hidden;">
-    <md-nav-bar
-      md-selected-nav-item="currentNavItem"
-      nav-bar-aria-label="navigation links">
-      <label class="navbar-brand">Crooked Hipster</label>
-      <md-nav-item md-nav-href="#!/start">Start</md-nav-item>
-      <md-nav-item md-nav-href="#!/life">Life</md-nav-item>
-      <md-nav-item md-nav-href="#!/freedom">Freedom</md-nav-item>
-    </md-nav-bar>
-    <div ng-view class="margin-top: 15px; text-align: center;"></div>
-    <div class="sun"></div>
-    <div class="bg_close"><div class="cloud"></div></div>
-    <div class="bg_far"><div class="cloud"></div></div>
+<body ng-cloak ng-controller="AppCtrl">
+  <md-nav-bar
+  md-selected-nav-item="currentNavItem"
+  nav-bar-aria-label="navigation links"
+  id="indexNavbar">
+  <label class="navbar-brand">Crooked Hipster</label>
+  <md-nav-item name="start" md-nav-href="#!/start">Start</md-nav-item>
+  <md-nav-item name="life" md-nav-href="#!/life">Life</md-nav-item>
+  <md-nav-item name="freedom" md-nav-href="#!/freedom">Freedom</md-nav-item>
+</md-nav-bar>
+<div ng-view></div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
-  -->
-  <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="bower_components/angular-aria/angular-aria.js"></script>
-  <script src="bower_components/angular-animate/angular-animate.js"></script>
-  <script src="bower_components/angular-material/angular-material.js"></script>
-  <script src="bower_components/underscore/underscore-min.js"></script>
-  <script src="bower_components/isomer/dist/isomer.min.js"></script>
+-->
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-aria/angular-aria.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-material/angular-material.js"></script>
+<script src="bower_components/underscore/underscore-min.js"></script>
+<script src="bower_components/isomer/dist/isomer.min.js"></script>
 
 
-  <script src="app.js"></script>
-  <script src="lifeView/game_of_life.js"></script>
-  <script src="lifeView/view.js"></script>
-  <script src="startView/view.js"></script>
-  <script src="freedomView/view.js"></script>
-  <script src="components/version/version.js"></script>
-  <script src="components/version/version-directive.js"></script>
-  <script src="components/version/interpolate-filter.js"></script>
+<script src="app.js"></script>
+<script src="lifeView/game_of_life.js"></script>
+<script src="lifeView/view.js"></script>
+<script src="startView/view.js"></script>
+<script src="freedomView/view.js"></script>
+<script src="components/version/version.js"></script>
+<script src="components/version/version-directive.js"></script>
+<script src="components/version/interpolate-filter.js"></script>
 </body>
 </html>

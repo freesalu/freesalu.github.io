@@ -1,83 +1,84 @@
-<div ng-app="life" ng-controller="LifeCtrl as gol">
-      <md-content layout-padding flex layout-align="start center">
-            <md-sidenav class="md-sidenav-left" md-component-id="left"
-                        md-disable-backdrop md-whiteframe="4">
+<div ng-app="life" ng-cloak ng-controller="LifeCtrl as gol">
+    <md-content flex layout="column" layout-align="start center">
+        <md-sidenav class="md-sidenav-left" class="md-primary" md-component-id="left" md-disable-backdrop md-whiteframe="4">
+            <md-toolbar class="md-primary">
+                <h1 class="md-toolbar-tools">Spawn a New World</h1>
+            </md-toolbar>
+            <md-content layout-padding class="md-primary" layout-align="center center">
+                <p>Using too large values (<i>10 is large</i>) here will freeze your browser.</p>
 
-                  <md-toolbar class="md-primary md-hue-1">
-                    <h1 class="md-toolbar-tools">Spawn a New World</h1>
-                  </md-toolbar>
-                  <md-content layout-padding layout-align="start center">
-                        <p>Using too large values here will freeze your browser.</p>
-                        <md-input-container layout="row" layout-align="start center">
-                            <span>Height </span>
-                            <input type="number" min="1" ng-init="gol.width=5" ng-model="gol.width" width="5" required>
-                        </md-input-container>
-                        <md-input-container layout="row" layout-align="start center">
-                            <span>Width </span>
-                            <input type="number" min="1" ng-init="gol.height=5"  ng-model="gol.height" width="5" required>
-                        </md-input-container>
-                        <md-input-container layout="row" layout-align="start center">
-                            <span>Depth </span>
-                            <input type="number" min="1" ng-init="gol.depth=5"  ng-model="gol.depth" width="5" required>
-                        </md-input-container>
-                        <md-button class="md-primary" ng-click="generateBoard()">Generate board</md-button>
-                        <md-button ng-click="toggleLeft()" class="md-accent">
-                          Done
-                        </md-button>
-                        <p>In case you're wondering, this is <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Conway's Game of Life</a> in 3D.</p>
-                        <p>Rotating is a bit bugged at the moment.</p>
-                  </md-content>
-            </md-sidenav>
-            <md-toolbar style="height: 1em; font-size: 90%;" class="md-primary md-hue-1"> 
-            <div layout="row" layout-padding layout-align="start center">
-                <md-button flex="10" ng-click="toggleLeft()" class="md-raised">
-                    <i class="fa fa-cog"></i> New Life
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Width</label>
+                    <input type="number" ng-model="gol.width">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Height</label>
+                    <input type="number" ng-model="gol.height">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Depth</label>
+                    <input type="number" ng-model="gol.depth">
+                </md-input-container>
+                <md-input-container flex-gt-sm class="md-block">
+                    <label>Initial Alive Cells (%)</label>
+                    <input type="number" min=0 max=100 ng-model="gol.initialAlive">
+                </md-input-container>   
+                <md-divider></md-divider>
+                <md-button class="md-primary" ng-click="generateBoard()">Generate board</md-button>
+                <md-button ng-click="toggleLeft()" class="md-accent">
+                  Done
                 </md-button>
-                <md-input-container>
-                    <md-button class="md-accent" ng-if="!gol.running" ng-click="gol.play()"><i class="fa fa-play"></i> Play</md-button>
-                    <md-button class="md-warn" ng-if="gol.running" ng-click="gol.stop()"><i class="fa fa-pause"></i> Pause</md-button>
-                </md-input-container>
-                <span> Delay </span>
-                <md-slider-container flex="100">
-                    <md-slider min="50" max="2000" ng-model="gol.stepDelay" aria-label="step-delay" id="step-delay"></md-slider>
-                    <md-input-container>
-                        <input flex type="number" ng-model="gol.stepDelay" aria-label="step-delay" aria-controls="step-delay">
-                        <span>ms</span>
-                    </md-input-container>
-                </md-slider-container>
+                <md-divider></md-divider>
+                <p>In case you're wondering, this is <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Conway's Game of Life</a> in 3D.</p>
+                <p>Performance is terrible.</p>
+            </md-content>
+        </md-sidenav>
+        <div layout="row" layout-fill>
+            <div flex="10"">
+                <md-toolbar flex layout="column" layout-fill>
+                    <md-button flex ng-click="toggleLeft()">
+                        <i class="fa fa-cog"></i> New Life
+                    </md-button>
+                </md-toolbar>
             </div>
-            </md-toolbar>
-            <!-- <div layout="row" layout-padding layout-align="start center">-->
-            <md-toolbar style="height: 1em; font-size: 90%;" class="md-primary">
-            <div layout="row" layout-padding layout-align="start center">
-                <md-input-container layout="row" layout-align="start center">
-                    <span>Zoom</span>
-                    <md-button ng-click="changeZoom(0.1)"><i class="fa fa-plus"></i></md-button> 
-                    <md-button ng-click="changeZoom(-0.1)"><i class="fa fa-minus"></i></md-button> 
-                </md-input-container>
-                <span>Rotate </span>
-                <md-input-container layout="row" layout-align="start center">
-                    <md-button ng-click="changeRotation(0.1, 0, 0)"><i class="fa fa-rotate-right"></i></md-button> 
-                    <span>X</span>
-                    <md-button ng-click="changeRotation(-0.1, 0, 0)"><i class="fa fa-rotate-left"></i></md-button> 
-                </md-input-container>
-                <md-input-container layout="row" layout-align="start center">
-                    <md-button ng-click="changeRotation(0, 0.1, 0)"><i class="fa fa-rotate-right"></i></md-button> 
-                    <span>Y</span>
-                    <md-button ng-click="changeRotation(0, -0.1, 0)"><i class="fa fa-rotate-left"></i></md-button> 
-                </md-input-container>
-                <md-input-container layout="row" layout-align="start center">
-                    <md-button ng-click="changeRotation(0, 0, 0.1)"><i class="fa fa-rotate-right"></i></md-button> 
-                    <span>Z</span>
-                    <md-button ng-click="changeRotation(0, 0, -0.1)"><i class="fa fa-rotate-left"></i></md-button> 
-                </md-input-container>
-                <md-input-container layout="row" layout-align="start center">
-                    <md-button ng-click="resetTransforms()">Undo Transforms</md-button>
-                </md-input-container>
+            <div layout="column" flex="90" layout-fill layout-align="start center">
+                <md-toolbar flex layout="row" class="md-primary">
+                    <div class="md-toolbar-tools" layout-align="start center" >
+                        <md-input-container>
+                            <md-button ng-if="!gol.running" ng-click="gol.play()"><i class="fa fa-play"></i> Play</md-button>
+                            <md-button ng-if="gol.running" ng-click="gol.stop()"><i class="fa fa-pause"></i> Pause</md-button>
+                        </md-input-container>
+                        <span> Delay&nbsp;</span>
+                        <md-slider-container flex="30" layout-align="start center">
+                            <md-slider min="50" max="2000" class="md-hue-1" ng-model="gol.stepDelay" aria-label="step-delay" id="step-delay"></md-slider>
+                        </md-slider-container>
+                        <div layout="row">
+                            <span>{{gol.stepDelay}}</span>
+                            <span>&nbsp;ms</span>
+                        </div>
+                    </div>
+                </md-toolbar>
+                <md-toolbar flex layout="row"  class="md-accent" layout-align="start center">
+                    <div class="md-toolbar-tools" layout-padding layout-align="start center" ng-mouseup="resetMouseState()" ng-mouseleave="resetMouseState()" >
+                        <span>&nbsp;</span>
+                        <md-button class="md-small" ng-click="changeZoom(0.1)"><i class="fa fa-search-plus"></i></md-button> 
+                        <md-button class="md-small" ng-click="changeZoom(-0.1)"><i class="fa fa-search-minus"></i></md-button> 
+                        <span>&nbsp;</span>
+                        <md-button class="md-small" ng-mousedown="startRotating(0.1, 0, 0)"><i class="fa fa-rotate-right"></i></md-button> 
+                        <label>X</label>
+                        <md-button class="md-small" ng-mousedown="startRotating(-0.1, 0, 0)"><i class="fa fa-rotate-left"></i></md-button> 
+                        <md-button class="md-small" ng-mousedown="startRotating(0, 0.1, 0)"><i class="fa fa-rotate-right"></i></md-button> 
+                        <label>Y</label>
+                        <md-button class="md-small" ng-mousedown="startRotating(0, -0.1, 0)"><i class="fa fa-rotate-left"></i></md-button> 
+                        <md-button class="md-small" ng-mousedown="startRotating(0, 0, 0.1)"><i class="fa fa-rotate-right"></i></md-button> 
+                        <label>Z</label>
+                        <md-button class="md-small" ng-mousedown="startRotating(0, 0, -0.1)"><i class="fa fa-rotate-left"></i></md-button> 
+                        <span>&nbsp;</span>
+                        <md-button class="md-primary" ng-click="resetTransforms()">Reset Transforms</md-button>
+                    </div>
+                </md-toolbar>
             </div>
-            </md-toolbar>
-            <div layout="row" layout-align="center">
-                <canvas oncontextmenu="return false;" ng-mousedown="canvasUp($event)" ng-mouseup="canvasUp($event)" ng-mousemove="mouseMove($event)" width="1600" height="1600" id="canvas" style="width: 600px; height: 400px;"></canvas>
-            </div>
-      </md-content>
+        </div>
+        <canvas oncontextmenu="return false;" height="2000" width="4000" ng-mousemove="mouseMove($event)" id="canvas"></canvas>
+    </md-content>
 </div>

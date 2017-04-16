@@ -3,12 +3,11 @@
 angular.module('myApp.freedom', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/freedom', {
-    templateUrl: 'freedomView/view.html',
-    controller: 'FreedomViewCtrl'
-  });
+    $routeProvider.when('/freedom', {
+        templateUrl: 'freedomView/view.html',
+        controller: 'FreedomViewCtrl'
+    });
 }])
-
-.controller('FreedomViewCtrl', [function() {
-
-}]);
+.controller('FreedomViewCtrl', function($scope) {
+    $scope.currentNavItem = "freedom";
+});
