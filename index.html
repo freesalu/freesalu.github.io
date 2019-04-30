@@ -1,83 +1,119 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
-<head>
+<!--
+  Don't look here. It's a mess!
+-->
+<html>
+  <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>🐰</title>
-  <script type="text/javascript">
-  // Single Page Apps for GitHub Pages
-  // https://github.com/rafrex/spa-github-pages
-  // Copyright (c) 2016 Rafael Pedicini, licensed under the MIT License
-  // ----------------------------------------------------------------------
-  // This script checks to see if a redirect is present in the query string
-  // and converts it back into the correct url and adds it to the
-  // browser's history using window.history.replaceState(...),
-  // which won't cause the browser to attempt to load the new url.
-  // When the single page app is loaded further down in this file,
-  // the correct url will be waiting in the browser's history for
-  // the single page app to route accordingly.
-  (function(l) {
-    if (l.search) {
-      var q = {};
-      l.search.slice(1).split('&').forEach(function(v) {
-        var a = v.split('=');
-        q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
-      });
-      if (q.p !== undefined) {
-        window.history.replaceState(null, null,
-          l.pathname.slice(0, -1) + (q.p || '') +
-          (q.q ? ('?' + q.q) : '') +
-          l.hash
-          );
+  <title>(◕‿◕✿)</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto|Titillium+Web" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/104/three.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .container {
+      position: absolute; 
+      top: 30px; 
+      text-align: center; 
+      width: 100%;
+    }
+    
+    .container .title {
+      font-family: 'Titillium Web', sans-serif; 
+      font-size: 30px;
+    }
+
+    .container .links {
+      font-family: 'Roboto', sans-serif;
+    } 
+
+    .container .links * {
+      display: inline-block;
+      text-decoration: unset;
+      border: 1px solid #333;
+      width: 5em;
+      margin: 3px;
+      color: #444;
+      padding: 5px;
+      border-radius: 3px;
+      box-shadow: 3px 3px #222; 
+    }
+  </style>
+  </head>
+  <body>
+    <div class="container">
+      <label class="title">Hi!</label>
+      <div class="links">
+        <a target="_blank" href="https://www.linkedin.com/in/filip-reesalu-b1ba1854/">LinkedIn</a>
+        <a target="_blank" href="https://www.annotell.com">Work</a>
+      </div>
+    </div>
+  </body>
+  <script id="vertexShader" type="x-shader/x-vertex">
+    uniform float time;
+    uniform vec2 screen;
+
+    void main() {
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position.x, position.y, sin(position.x + time / 100.), 1.0);
+      gl_PointSize = 1.5; 
+    }
+  </script>
+  <script id="fragmentShader" type="x-shader/x-fragment">
+    void main() {
+      gl_FragColor = vec4(0.0, 0.58, 0.86, 1.0);
+    }
+  </script>
+  <script type="application/javascript">
+    const {innerWidth, innerHeight} = window;
+
+    const renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setClearColor(0xDDDDDD, 1);
+    document.body.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight);
+    camera.position.z = 50;
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+    scene.add(camera);
+
+    const pointGeometry = new THREE.BufferGeometry();
+    const N = 500;
+    const positions = [];
+    for (let i = -N / 2; i < N / 2; i += 0.5) {
+      for (let j = -N / 2; j < N / 2; j += 0.5) {
+        positions.push(i, j, 0);
       }
     }
-  }(window.location))
-</script>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
-<link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
-<link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
-<link rel="stylesheet" href="app.css">
-<script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
-</head>
-<body ng-cloak ng-controller="AppCtrl">
-  <md-nav-bar
-  md-selected-nav-item="currentNavItem"
-  nav-bar-aria-label="navigation links"
-  id="indexNavbar">
-  <label class="navbar-brand">Crooked Hipster</label>
-  <md-nav-item name="start" md-nav-href="#!/start">Start</md-nav-item>
-  <md-nav-item name="life" md-nav-href="#!/life">Life</md-nav-item>
-  <md-nav-item name="freedom" md-nav-href="#!/freedom">Freedom</md-nav-item>
-</md-nav-bar>
-<div ng-view></div>
+    pointGeometry.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    const uniforms = {
+      time: { type: "f", value: 0.0 },
+      screen: { type: "v2", value: [innerWidth, innerHeight]}
+    };
+    const shaderMaterial = new THREE.ShaderMaterial( {
+      vertexShader: document.getElementById( 'vertexShader' ).textContent,
+      fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+      uniforms,
+    });
 
-  <!-- In production use:
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
--->
-<script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/angular-route/angular-route.js"></script>
-<script src="bower_components/angular-aria/angular-aria.js"></script>
-<script src="bower_components/angular-animate/angular-animate.js"></script>
-<script src="bower_components/angular-material/angular-material.js"></script>
-<script src="bower_components/underscore/underscore-min.js"></script>
-<script src="bower_components/isomer/dist/isomer.min.js"></script>
+    const points = new THREE.Points(pointGeometry, shaderMaterial);
+    scene.add(points);
+    points.rotateX(-Math.PI / 3);
 
+    const startTime = Date.now();
 
-<script src="app.js"></script>
-<script src="lifeView/game_of_life.js"></script>
-<script src="lifeView/view.js"></script>
-<script src="startView/view.js"></script>
-<script src="freedomView/view.js"></script>
-<script src="components/version/version.js"></script>
-<script src="components/version/version-directive.js"></script>
-<script src="components/version/interpolate-filter.js"></script>
-</body>
+    function render() {
+      requestAnimationFrame(render);
+      
+      uniforms.time.value = (Date.now() - startTime) / 1000. * 60.;
+
+      renderer.render(scene, camera);
+    }
+    render();
+  </script>
 </html>
