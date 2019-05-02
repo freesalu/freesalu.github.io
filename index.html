@@ -31,7 +31,7 @@
       font-family: 'Roboto', sans-serif;
     } 
 
-    .container .links * {
+    a {
       display: inline-block;
       text-decoration: unset;
       border: 1px solid #333;
@@ -48,6 +48,7 @@
     <div class="container">
       <label class="title">Hi!</label>
       <div class="links">
+        <a target="_blank" href="https://github.com/freesalu">GitHub</a>
         <a target="_blank" href="https://www.linkedin.com/in/filip-reesalu-b1ba1854/">LinkedIn</a>
         <a target="_blank" href="https://www.annotell.com">Work</a>
       </div>
@@ -56,9 +57,15 @@
   <script id="vertexShader" type="x-shader/x-vertex">
     uniform float time;
     uniform vec2 screen;
+    uniform vec2 sharks[10];
 
     void main() {
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position.x, position.y, sin(position.x + time / 100.), 1.0);
+      float sharkDistance = 0.;
+      for (int i = 0; i < 10; i++) {
+        sharkDistance += max(0., 3. - distance(vec2(position.x, position.y), sharks[i]));
+      }
+      float zDiff = min(sharkDistance, 6.);
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position.x, position.y, sin(position.x + time / 100.) + zDiff, 1.0);
       gl_PointSize = 1.5; 
     }
   </script>
@@ -82,6 +89,9 @@
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     scene.add(camera);
 
+    const raycaster = new THREE.Raycaster();
+		raycaster.params.Points.threshold = 2.;
+
     const pointGeometry = new THREE.BufferGeometry();
     const N = 500;
     const positions = [];
@@ -90,10 +100,15 @@
         positions.push(i, j, 0);
       }
     }
+
+    const randomCoord = () => Math.floor(Math.random() * N - N / 2);
+    const randomPoint = () => new THREE.Vector2(randomCoord(), randomCoord());
+
     pointGeometry.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
     const uniforms = {
       time: { type: "f", value: 0.0 },
-      screen: { type: "v2", value: [innerWidth, innerHeight]}
+      screen: { type: "v2", value: [innerWidth, innerHeight]},
+      sharks: { type: "v2v", value: (new Array(10).fill(0)).map(() => randomPoint())},
     };
     const shaderMaterial = new THREE.ShaderMaterial( {
       vertexShader: document.getElementById( 'vertexShader' ).textContent,
@@ -104,11 +119,30 @@
     const points = new THREE.Points(pointGeometry, shaderMaterial);
     scene.add(points);
     points.rotateX(-Math.PI / 3);
+    const mouse = {x: 0, y: 0};
 
     const startTime = Date.now();
+    
+    const steps = 500;
+
+    let targets = new Array(10).fill(0).map(() => randomPoint());
 
     function render() {
       requestAnimationFrame(render);
+
+      const sharks = uniforms.sharks.value;
+      for (const [i, shark] of sharks.entries()) {
+        let target = targets[i];
+        const dx = target.x - shark.x;
+        const dy = target.y - shark.y;
+
+        shark.x += dx / steps;
+        shark.y += dy / steps;
+
+        if (Math.abs(dx + dy) < 2.) {
+          targets[i] = randomPoint();
+        }
+      }
       
       uniforms.time.value = (Date.now() - startTime) / 1000. * 60.;
 
