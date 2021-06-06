@@ -13,13 +13,17 @@
     body {
       margin: 0;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     .container {
-      position: absolute; 
       top: 30px; 
       text-align: center; 
       width: 100%;
+      padding-bottom: 10px;
+      border-bottom: #333 solid;
+      box-shadow: 0px 15px 15px -15px #222;    
     }
     
     .container .title {
@@ -42,6 +46,52 @@
       border-radius: 3px;
       box-shadow: 3px 3px #222; 
     }
+
+    a:hover {
+      background-color: #eee;
+      cursor: pointer;
+    }
+
+    canvas {
+      height: 100%;
+      width: 100%;
+    }
+
+    #switch {
+      position: absolute;
+      left: 10;
+      top: 10;
+      display: inline-block;
+      border: 1px solid #bbb;
+      background: white;;
+      color: #222;
+      padding: 10px;
+    }
+
+    #switch:hover {
+      background-color: #ccc;
+      cursor: pointer;
+    }
+
+    #what {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background: white;
+      padding: 20px;
+      border: 1px solid #bbbbbb;
+    }
+
+    #what>.text {
+      display: none;
+    }
+
+    #what:hover>.icon {
+      display: none;
+    }
+    #what:hover>.text {
+      display: unset;
+    }
   </style>
   </head>
   <body>
@@ -53,101 +103,14 @@
         <a target="_blank" href="https://www.annotell.com">Work</a>
       </div>
     </div>
+    <div>
+      <canvas id="three"></canvas>
+      <button id="switch">Switch perspective</button>
+      <div id="what">
+        <span class="icon">❔</span>
+        <span class="text">This is just a space for random things that I play around with.</span>
+      </div>
+    </div>
   </body>
-  <script id="vertexShader" type="x-shader/x-vertex">
-    uniform float time;
-    uniform vec2 screen;
-    uniform vec2 sharks[10];
-
-    void main() {
-      float sharkDistance = 0.;
-      for (int i = 0; i < 10; i++) {
-        sharkDistance += max(0., 3. - distance(vec2(position.x, position.y), sharks[i]));
-      }
-      float zDiff = min(sharkDistance, 6.);
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position.x, position.y, sin(position.x + time / 100.) + zDiff, 1.0);
-      gl_PointSize = 1.5; 
-    }
-  </script>
-  <script id="fragmentShader" type="x-shader/x-fragment">
-    void main() {
-      gl_FragColor = vec4(0.0, 0.58, 0.86, 1.0);
-    }
-  </script>
-  <script type="application/javascript">
-    const {innerWidth, innerHeight} = window;
-
-    const renderer = new THREE.WebGLRenderer({antialias: true});
-    renderer.setSize(innerWidth, innerHeight);
-    renderer.setClearColor(0xDDDDDD, 1);
-    document.body.appendChild(renderer.domElement);
-
-    const scene = new THREE.Scene();
-
-    const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight);
-    camera.position.z = 50;
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
-    scene.add(camera);
-
-    const raycaster = new THREE.Raycaster();
-		raycaster.params.Points.threshold = 2.;
-
-    const pointGeometry = new THREE.BufferGeometry();
-    const N = 500;
-    const positions = [];
-    for (let i = -N / 2; i < N / 2; i += 0.5) {
-      for (let j = -N / 2; j < N / 2; j += 0.5) {
-        positions.push(i, j, 0);
-      }
-    }
-
-    const randomCoord = () => Math.floor(Math.random() * N - N / 2);
-    const randomPoint = () => new THREE.Vector2(randomCoord(), randomCoord());
-
-    pointGeometry.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    const uniforms = {
-      time: { type: "f", value: 0.0 },
-      screen: { type: "v2", value: [innerWidth, innerHeight]},
-      sharks: { type: "v2v", value: (new Array(10).fill(0)).map(() => randomPoint())},
-    };
-    const shaderMaterial = new THREE.ShaderMaterial( {
-      vertexShader: document.getElementById( 'vertexShader' ).textContent,
-      fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
-      uniforms,
-    });
-
-    const points = new THREE.Points(pointGeometry, shaderMaterial);
-    scene.add(points);
-    points.rotateX(-Math.PI / 3);
-    const mouse = {x: 0, y: 0};
-
-    const startTime = Date.now();
-    
-    const steps = 500;
-
-    let targets = new Array(10).fill(0).map(() => randomPoint());
-
-    function render() {
-      requestAnimationFrame(render);
-
-      const sharks = uniforms.sharks.value;
-      for (const [i, shark] of sharks.entries()) {
-        let target = targets[i];
-        const dx = target.x - shark.x;
-        const dy = target.y - shark.y;
-
-        shark.x += dx / steps;
-        shark.y += dy / steps;
-
-        if (Math.abs(dx + dy) < 2.) {
-          targets[i] = randomPoint();
-        }
-      }
-      
-      uniforms.time.value = (Date.now() - startTime) / 1000. * 60.;
-
-      renderer.render(scene, camera);
-    }
-    render();
-  </script>
+  <script type="application/javascript" src="main.js"></script>
 </html>
